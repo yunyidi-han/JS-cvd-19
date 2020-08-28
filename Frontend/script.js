@@ -103,7 +103,10 @@ let addCard = (response) => {
 
   document.getElementById("addMovie").reset();
 };
-
+var ctx = document.getElementById('myChart');
+var ctx = document.getElementById('myChart').getContext('2d');
+var ctx = $('#myChart');
+var ctx = 'myChart';
 // let validate = () => {
 //   let keyword = document.getElementById("titleSearch").value;
 //   if (keyword == "") {
