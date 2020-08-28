@@ -185,5 +185,5 @@ let deleteCard = (e) => {
 
 // document.getElementsByClassName(btn).addEventListener("click", deleteCard);
 //where to put this?
-
+console.log('hello');
 // searchButton.addEventListener("click", validate);
