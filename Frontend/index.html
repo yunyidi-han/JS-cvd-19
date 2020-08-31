@@ -52,28 +52,27 @@
         action="action_page.php"
         style="width: 50%; margin-left: 25%"
       >
-        <input type="text" placeholder="Search.." name="search" />
-        <button id="search" type="submit">
-          <i class="fa fa-search">/Search</i>
-        </button>
+        <input id="state" type="text" placeholder="Search.." name="search" />
+        <input id="search" type="button" class="fa fa-search" value="Search" />
         <div>
           <input
             type="radio"
             id="daily-radioButton"
-            name="radio-button"
+            name="radio-button-time"
+            value="0"
             checked
           /><label class="label-button" for="daily">Daily</label>
           <input
             type="radio"
             id="weekly-radioButton"
-            name="radio-button"
-            checked
+            name="radio-button-time"
+            value="1"
           /><label class="label-button" for="weekly">Weekly</label>
           <input
             type="radio"
             id="monthly-radioButton"
-            name="radio-button"
-            checked
+            name="radio-button-time"
+            value="2"
           /><label class="label-button" for="monthly">Monthly</label>
         </div>
       </form>
@@ -455,8 +454,18 @@
       </svg>
     </div>
 
-    <!--display charts-->
-    <div id="display-charts"></div>
+    <!--display state header-->
+    <div id="display-head"></div>
+
+    <!-- display cards -->
+    <div
+      id="display-cards"
+      class="d-flex"
+      style="flex-direction: row-reverse; justify-content: flex-end"
+    ></div>
+
+    <!-- display graphs -->
+    <div id="display-graphs"></div>
 
     <!--More information about covid-->
     <div id="covid-information" style="margin-left: 25%">
