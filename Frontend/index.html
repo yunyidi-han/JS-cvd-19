@@ -48,14 +48,20 @@
     <!-- The form -->
     <div id="search-body">
       <form
-        class="example"
+        id="search-bar-container"
+        class="search-bar"
         action="action_page.php"
         style="width: 50%; margin-left: 25%"
       >
-        <input type="text" placeholder="Search.." name="search" />
-        <button id="search" type="submit">
-          <i class="fa fa-search">/Search</i>
-        </button>
+        <div>
+          <input
+            type="text"
+            placeholder="Search.."
+            name="search"
+            style="width: 50%"
+          />
+          <input id="search" type="submit" style="height: 30px" />
+        </div>
         <div>
           <input
             type="radio"
@@ -459,6 +465,7 @@
     <div id="display-charts"></div>
 
     <!--More information about covid-->
+    <!--
     <div id="covid-information" style="margin-left: 25%">
       <ul class="nav nav-tabs">
         <li class="nav-item">
@@ -497,7 +504,7 @@
           <a class="nav-link" href="#">Reliable Links</a>
         </li>
       </ul>
-    </div>
+    </div>-->
     <!--sign up for alerts-->
     <div id="signup"></div>
     <div
