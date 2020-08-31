@@ -1,9 +1,10 @@
 body {
   display: flex;
-  background-color: antiquewhite;
   flex-direction: column;
   position: relative;
   min-height: 100vh;
+  background-color: darkgray;
+  scroll-behavior: smooth;
 }
 #search-body {
   padding-top: 50px;
@@ -15,7 +16,7 @@ body {
 }
 
 #footer {
-  position: fixed;
+  position: relative;
   bottom: 0;
   width: 100%;
   height: 2.5rem;
@@ -57,6 +58,46 @@ form.example::after {
   clear: both;
   display: table;
 }
+
+.label-button {
+  color: white;
+  font-size: 12pt;
+}
+/*FOR MAP
+*/
+#us-map {
+  display: block;
+
+  width: 50%;
+  height: 50%;
+  margin-left: 25%;
+}
+path:hover,
+circle:hover {
+  stroke: #002868 !important;
+  stroke-width: 2px;
+  stroke-linejoin: round;
+  fill: #002868 !important;
+  cursor: pointer;
+}
+#path67 {
+  fill: none !important;
+  stroke: #a9a9a9 !important;
+  cursor: default;
+}
+#info-box {
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+  background-color: #ffffff;
+  border: 2px solid #bf0a30;
+  border-radius: 5px;
+  padding: 5px;
+  font-family: arial;
+}
+
 @media screen and (max-width: 800px) {
   #container-header,
   #search-body,
