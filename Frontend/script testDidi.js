@@ -1,118 +1,41 @@
-const symptomsTab = document.getElementById("symptoms");
-const stopSpread = document.getElementById("stop-spread");
-const coughimage = document.getElementById("cough-image");
-const lightBreathImage = document.getElementById("light-breath-image");
-const lightFeverImage = document.getElementById("light-fever-image");
-const wearMaskImage = document.getElementById("wear-mask-image");
-
-symptomsTab.addEventListener("click", () => {
-  coughimage.style.display = "block";
-  lightBreathImage.style.display = "block";
-  lightFeverImage.style.display = "block";
-  wearMaskImage.style.display = "none";
-});
-
-stopSpread.addEventListener("click", () => {
-  wearMaskImage.style.display = "block";
-  coughimage.style.display = "none";
-  lightBreathImage.style.display = "none";
-  lightFeverImage.style.display = "none";
-});
-
-/*This portion of code is for the US map */
-$("path, circle").hover(function (e) {
-  $("#info-box").css("display", "block");
-  $("#info-box").html($(this).data("info"));
-});
-
-$("path, circle").mouseleave(function (e) {
-  $("#info-box").css("display", "none");
-});
-
-$(document)
-  .mousemove(function (e) {
-    $("#info-box").css("top", e.pageY - $("#info-box").height() - 30);
-    $("#info-box").css("left", e.pageX - $("#info-box").width() / 2);
-  })
-  .mouseover();
-
-var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-if (ios) {
-  $("a").on("click touchend", function () {
-    var link = $(this).attr("href");
-    window.open(link, "_blank");
-    return false;
-  });
-}
-
-// ~~~~~~~~~~~~~~~~~~~~ DIDI'S CODE ~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~ Varibles to change ~~~~~~~~~~~~~~~
 
 let searchButton = document.getElementById("search"); //button for the action lisenter
 // let timeButton = document.getElementById("CHANGE");
 // let heatMapButton = document.getElementById("CHANGE");
-let infoContainer = document.getElementById("display-head"); // element where all the search stuff will return to
+let infoContainer = document.getElementById("display-charts"); // element where all the search stuff will return to
 let cardContainer = document.getElementById("display-cards");
 
 let stateBox = document.getElementById("state"); //element with the state's entry
-let timeBoxs = document.getElementsByName("radio-button-time"); // element with the time frame's entry
+let timeBox = document.getElementById("time"); // element with the time frame's entry
 
-//~~~~~~~~~~~~~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~
-let searchValidateMap = (state) => {
-  searchValidate(state);
-};
-
-let searchValidateButton = () => {
+let searchValidate = () => {
   let state = stateBox.value; //takes the value in the search box after you click search
-  searchValidate(state);
-};
-
-let searchValidate = (state) => {
-  let timeFrame = "bleh";
-  for (let i = 0; i < timeBoxs.length; i++) {
-    if (timeBoxs[i].checked) {
-      timeFrame = timeBoxs[i].value;
-      break;
-    }
-  }
+  let timeFrame = timeBox.value;
   infoContainer.innerHTML = ""; //clear the container
-  cardContainer.innerHTML = "";
+  console.log(state);
   axios
     .get("https://api.covidtracking.com/v1/states/info.json")
     .then((response) => {
-      let stateIndex = "State not found!";
-      if (state.length != 2) {
-        stateIndex = response.data.findIndex(
-          (ele) => ele.name.toLowerCase() === state.toLowerCase()
-        );
-      } else {
-        stateIndex = response.data.findIndex(
-          (ele) => ele.state.toUpperCase() === state.toUpperCase()
-        );
-      }
-      //finds the index of the object that contains the state we're searching for
+      console.log(response);
+      //standard axios promise
+      let stateIndex = response.data.findIndex((ele) => ele.name === state); //finds the index of the object that contains the state we're searching for
       let stateInfo = response.data[stateIndex];
+      let stateLetters = stateInfo.state;
 
+      //notes = snippet about state
+      //maybe twitter as well?
       let stateHeader = document.createElement("div");
       let header = document.createElement("h1");
-      header.style.textAlign = "center";
-
-      if (stateIndex === -1) {
-        header.innerHTML = "No State Found!";
-        infoContainer.appendChild(header);
-      } else {
-        let stateLetters = stateInfo.state;
-        header.innerHTML = stateInfo.name;
-        let notes = document.createElement("p");
-        notes.innerHTML = `${stateInfo.notes} <br>
-        State Covid-19 Information site: ${stateInfo.covid19Site} `;
-        stateHeader.appendChild(header);
-        stateHeader.appendChild(notes);
-        infoContainer.appendChild(stateHeader);
-        searchState(stateLetters, timeFrame);
-      }
-
+      header.innerHTML = state;
+      stateHeader.appendChild(header);
+      let notes = document.createElement("p");
+      notes.innerHTML = stateInfo.notes;
+      stateHeader.appendChild(notes);
+      infoContainer.appendChild(stateHeader);
       // some other stuff here
+
+      searchState(stateLetters, timeFrame);
     });
 };
 
@@ -123,20 +46,15 @@ let searchState = (letters, time) => {
       console.log(response);
       //standard axios promise
 
-      if (time == 0) {
+      if (time === "day") {
         addCard([response.data[0]]);
       } // pass an ARRAY of just 1 element to create the initial info card
 
       //pass different numbers depending on the timeframe
-      else if (time == 1) {
+      if (time === "week") {
         addCard(response.data.slice(0, 7));
-      } else if (time == 2) {
-        //takes ever 4th day for the monthly display
-        let monthlyCardDays = [];
-        for (let i = 0; i < 33; i += 4) {
-          monthlyCardDays.push(response.data[i]);
-        }
-        addCard(monthlyCardDays);
+      } else if (time === "month") {
+        //addCard([response.data.splice()]);
       }
 
       //for current stat of day
@@ -144,6 +62,7 @@ let searchState = (letters, time) => {
 };
 
 let addCard = (data) => {
+  cardContainer.innerHTML = "";
   for (let i = 0; i < data.length; i++) {
     // cardID++;
     let date = data[i].date.toString();
@@ -229,7 +148,7 @@ let addCard = (data) => {
     cardContainer.appendChild(card);
   }
 
-  document.getElementById("searchForm").reset();
+  // document.getElementById("GImmie a form id man").reset();
 };
 
 let editCard = (e) => {
@@ -240,11 +159,4 @@ let deleteCard = (e) => {
   e.target.parentElement.remove();
 };
 
-//~~~~~~~ action listener for the search button
-searchButton.addEventListener("click", searchValidateButton);
-
-//~~~~~~~~~~ action listener for the interactive map
-$("path, circle").click((e) => {
-  let state = e.target.id; //gets the 2 letter state ID when clicking on the map
-  searchValidateMap(state);
-});
+searchButton.addEventListener("click", searchValidate);

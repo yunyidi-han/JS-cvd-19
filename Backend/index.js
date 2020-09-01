@@ -12,47 +12,9 @@ app.use(cors());
 // parse application/json
 app.use(bodyParser.json());
 
-let movies = [
-  {
-    id: 1,
-    title: "Training Day",
-    actor: "Nelly",
-    year: "2002",
-    poster:
-      "https://upload.wikimedia.org/wikipedia/en/b/b3/Training_Day_Poster.jpg",
-  },
-  {
-    id: 2,
-    title: "The Mermaid",
-    actor: "Subash",
-    year: "2020",
-    poster: "https://images4.penguinrandomhouse.com/cover/9781506715629",
-  },
-  {
-    id: 3,
-    title: "Dark Knight",
-    actor: "Nelly",
-    year: "2000",
-    poster:
-      "https://images-na.ssl-images-amazon.com/images/I/51kUEdD-gHL._SY445_.jpg",
-  },
-  {
-    id: 4,
-    title: "Lion King",
-    actor: "Subash",
-    year: "1995",
-    poster:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTrd_UcBYIFxPbu8qFrTmTfGsYNmKtYJsnbCTZ8WZbEDB0tSYcW",
-  },
-  {
-    id: 5,
-    title: "Gilmore Girls",
-    actor: "Subash",
-    year: "1998",
-    poster:
-      "https://m.media-amazon.com/images/M/MV5BODM1OTk4MDY2M15BMl5BanBnXkFtZTgwOTEwNzczMDI@._V1_.jpg",
-  },
-];
+// let movies = [
+//   {}
+// ];
 
 // expects the following query parameters
 // actor and year localhost:3000 => /movies
