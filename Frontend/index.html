@@ -48,14 +48,20 @@
     <!-- The form -->
     <div id="search-body">
       <form
-        id="searchForm"
-        class="example"
+        id="search-bar-container"
+        class="search-bar"
         action="action_page.php"
         style="width: 50%; margin-left: 25%"
         onkeydown="return event.key != 'Enter';"
       >
-        <input id="state" type="text" placeholder="Search.." name="search" />
-        <input id="search" type="button" class="fa fa-search" value="Search" />
+        <input
+          id="state"
+          type="text"
+          placeholder="Search.."
+          name="search"
+          style="width: 50%"
+        />
+        <input id="search" type="button" style="height: 30px" value="Search" />
         <div>
           <input
             type="radio"
@@ -467,7 +473,9 @@
     ></div>
 
     <!-- display graphs -->
-    <div id="display-graphs"></div>
+    <div id="display-graphs" class="col-md-6">
+      <!-- <canvas id="increaseChart" width="800" height="400"></canvas> -->
+    </div>
 
     <!--More information about covid-->
     <div id="covid-information" style="margin-left: 25%">
@@ -539,6 +547,7 @@
       integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="./script.js"></script>
   </body>
 </html>
