@@ -53,6 +53,7 @@ let searchButton = document.getElementById("search"); //button for the action li
 // let heatMapButton = document.getElementById("CHANGE");
 let infoContainer = document.getElementById("display-head"); // element where all the search stuff will return to
 let cardContainer = document.getElementById("display-cards");
+let chartContainer = document.getElementById("display-graphs");
 
 let stateBox = document.getElementById("state"); //element with the state's entry
 let timeBoxs = document.getElementsByName("radio-button-time"); // element with the time frame's entry
@@ -75,8 +76,9 @@ let searchValidate = (state) => {
       break;
     }
   }
-  infoContainer.innerHTML = ""; //clear the container
+  infoContainer.innerHTML = ""; //clear the containers
   cardContainer.innerHTML = "";
+  chartContainer.innerHTML = "";
   axios
     .get("https://api.covidtracking.com/v1/states/info.json")
     .then((response) => {
@@ -144,6 +146,14 @@ let searchState = (letters, time) => {
 };
 
 let addCard = (data) => {
+  //chart stuff~~~~~~~~
+  let dateArr = [];
+  let postArr = [];
+  let negArr = [];
+  let totalArr = [];
+  let deathsData = [];
+
+  //~~~~~~~~~~~~~~~~
   for (let i = 0; i < data.length; i++) {
     // cardID++;
     let date = data[i].date.toString();
@@ -161,6 +171,15 @@ let addCard = (data) => {
     let { negativeIncrease } = data[i];
     let { deathIncrease } = data[i];
     let { deathConfirmed } = data[i];
+
+    //~~~~~~~~~~ add data for each iteration to the dataset
+    dateArr.unshift(date.toDateString());
+    postArr.unshift(positiveIncrease);
+    negArr.unshift(negativeIncrease);
+    totalArr.unshift(positiveIncrease + negativeIncrease);
+    deathsData.unshift(deathIncrease);
+
+    //~~~~~~~
 
     let card = document.createElement("div");
     card.setAttribute("class", "card");
@@ -228,6 +247,61 @@ let addCard = (data) => {
 
     cardContainer.appendChild(card);
   }
+
+  let canvas = document.createElement("canvas");
+  canvas.setAttribute("id", "increaseChart");
+  canvas.setAttribute("width", "800");
+  canvas.setAttribute("height", "400");
+
+  var ctx2 = canvas.getContext("2d");
+  var increaseChart = new Chart(ctx2, {
+    type: "bar",
+    data: {
+      labels: dateArr,
+      datasets: [
+        {
+          label: "Positive Test Increase",
+          backgroundColor: "rgba(255,100,30,1)",
+          data: postArr,
+        },
+        {
+          label: "Negative Test Increase",
+          backgroundColor: "rgba(255,0,0,1)",
+          data: negArr,
+        },
+        {
+          label: "Total Test Increase",
+          backgroundColor: "rgba(0,255,255,1)",
+          data: totalArr,
+        },
+        {
+          label: "Deaths Increase",
+          backgroundColor: "rgba(255,255,255,1)",
+          data: deathsData,
+        },
+      ],
+    },
+    options: {
+      title: {
+        display: true,
+        fontStyle: "bold",
+        fontFamily: "Helvetica Neue",
+        text: "Daily Changes in Statistics",
+      },
+      barValueSpacing: 20,
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  chartContainer.appendChild(canvas);
 
   document.getElementById("searchForm").reset();
 };
