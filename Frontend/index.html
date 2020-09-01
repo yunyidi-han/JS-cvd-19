@@ -48,9 +48,11 @@
     <!-- The form -->
     <div id="search-body">
       <form
+        id="searchForm"
         class="example"
         action="action_page.php"
         style="width: 50%; margin-left: 25%"
+        onkeydown="return event.key != 'Enter';"
       >
         <input id="state" type="text" placeholder="Search.." name="search" />
         <input id="search" type="button" class="fa fa-search" value="Search" />
