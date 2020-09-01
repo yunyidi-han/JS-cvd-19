@@ -48,14 +48,22 @@
     <!-- The form -->
     <div id="search-body">
       <form
-        id="searchForm"
-        class="example"
+        id="search-bar-container"
+        class="search-bar"
         action="action_page.php"
         style="width: 50%; margin-left: 25%"
         onkeydown="return event.key != 'Enter';"
       >
-        <input id="state" type="text" placeholder="Search.." name="search" />
-        <input id="search" type="button" class="fa fa-search" value="Search" />
+        <div>
+          <input
+            id="state"
+            type="text"
+            placeholder="Search.."
+            name="search"
+            style="width: 50%"
+          />
+          <input id="search" type="button" style="height: 30px" value="Search"/>
+        </div>
         <div>
           <input
             type="radio"
@@ -470,6 +478,7 @@
     <div id="display-graphs"></div>
 
     <!--More information about covid-->
+
     <div id="covid-information" style="margin-left: 25%">
       <ul class="nav nav-tabs">
         <li class="nav-item">
