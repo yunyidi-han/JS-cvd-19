@@ -5,23 +5,28 @@ const lightBreathImage = document.getElementById("light-breath-image");
 const lightFeverImage = document.getElementById("light-fever-image");
 const wearMaskImage = document.getElementById("wear-mask-image");
 
-const statePaths = document.getElementsByTagName("path");
-const posIncreaseArr = [];
+const statePaths = document.getElementsByTagName("path"); // gets ALL the path tags, which are the states in the interative map
+const posIncreaseArr = []; // gets populated with the increase in positive test cases from the day before
 
-//populates pos increaseArr with objects {state(2 letters): Positive Test Increases from previous day}
+//populates posIncreaseArr with -Positive Test Increases from previous day-... added in the order that the path array was added
 axios
-  .get(`https://api.covidtracking.com/v1/states/current.json`)
+  .get(`https://api.covidtracking.com/v1/states/current.json`) //gets the dataset from the covid website that lists the current day statistics for all 50 states
   .then((response) => {
     for (i = 0; i < statePaths.length; i++) {
-      let pathID = statePaths[i].getAttribute("id");
+      //iterates over all the states in the interative map
+      let pathID = statePaths[i].getAttribute("id"); //for each iteration, it finds the ID for that particular path
       for (j = 0; j < response.data.length; j++) {
+        //iterates over the dataset
         if (response.data[j].state == pathID) {
-          posIncreaseArr.push(response.data[j].positiveIncrease);
-          break;
+          //if the iterated dataset's state name matches the path ID...
+          posIncreaseArr.push(response.data[j].positiveIncrease); //then we add the postitive [test] increase stat to the array
+          break; //breaks out of the current for loop after we find the match
         }
       }
     }
     for (i = 0; i < statePaths.length; i++) {
+      // after the posIncreaseArr gets populated... we iterate over the path again to change the fill color for each state
+      //a bit redundant, we could have put it in the loop above, but this way we can scale values later if we choose to [for example 0-100% opacity of 1 color]
       let color = "black";
       if (posIncreaseArr[i] < 500) {
         color = "green";
@@ -38,9 +43,6 @@ axios
       statePaths[i].setAttribute("fill", color);
     }
   });
-
-document.getElementById("HI").setAttribute("fill", "red");
-//sets the color for the heatmap
 
 symptomsTab.addEventListener("click", () => {
   coughimage.style.display = "block";
@@ -86,8 +88,7 @@ if (ios) {
 // ~~~~~~~~~~~~~~~~~~~~ Varibles to change ~~~~~~~~~~~~~~~
 
 let searchButton = document.getElementById("search"); //button for the action lisenter
-// let timeButton = document.getElementById("CHANGE");
-// let heatMapButton = document.getElementById("CHANGE");
+
 let infoContainer = document.getElementById("display-head"); // element where all the search stuff will return to
 let cardContainer = document.getElementById("display-cards");
 let chartContainer = document.getElementById("display-graphs");
@@ -96,6 +97,7 @@ let stateBox = document.getElementById("state"); //element with the state's entr
 let timeBoxs = document.getElementsByName("radio-button-time"); // element with the time frame's entry
 
 //~~~~~~~~~~~~~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~
+//these two functions are called by their respective action listers toward the bottom of the page... in case we want to add validation or other stuff
 let searchValidateMap = (state) => {
   searchValidate(state);
 };
@@ -105,85 +107,85 @@ let searchValidateButton = () => {
   searchValidate(state);
 };
 
+//both action listeners feed to this main function, passing in the state being searched
 let searchValidate = (state) => {
-  let timeFrame = "bleh";
+  let timeFrame = "bleh"; //initialize the variable for the timeframe we're searching for
   for (let i = 0; i < timeBoxs.length; i++) {
+    //checks the radio buttons for the timeframe we will be searching for [0-day,1-week,2-month]
     if (timeBoxs[i].checked) {
       timeFrame = timeBoxs[i].value;
       break;
     }
   }
-  infoContainer.innerHTML = ""; //clear the containers
+  infoContainer.innerHTML = ""; //clear the containers for a fresh search
   cardContainer.innerHTML = "";
   chartContainer.innerHTML = "";
   axios
-    .get("https://api.covidtracking.com/v1/states/info.json")
+    .get("https://api.covidtracking.com/v1/states/info.json") //first axios get for the states metainfo pages
     .then((response) => {
-      let stateIndex = "State not found!";
+      let stateIndex = "State not found!"; //initialize the state variable, will never remain this string
       if (state.length != 2) {
+        //if the passed state is in the 2 letter shortened format (from clicking the map, or typing in 2 letters)... check if it's a valid state in the dataset
         stateIndex = response.data.findIndex(
           (ele) => ele.name.toLowerCase() === state.toLowerCase()
         );
       } else {
+        //if the passed state isn't 2 letters (from typing in the search bar)... check if it's a valid state in the dataset
         stateIndex = response.data.findIndex(
           (ele) => ele.state.toUpperCase() === state.toUpperCase()
         );
       }
-      //finds the index of the object that contains the state we're searching for
+      //finds the state object using the index of the state we're searching for
       let stateInfo = response.data[stateIndex];
 
-      let stateHeader = document.createElement("div");
+      let stateHeader = document.createElement("div"); //creates a div and header
       let header = document.createElement("h1");
       header.style.textAlign = "center";
 
       if (stateIndex === -1) {
+        //if the findIndex function doesn't find a state, it returns -1... show message and end function
         header.innerHTML = "No State Found!";
         infoContainer.appendChild(header);
       } else {
-        let stateLetters = stateInfo.state;
-        header.innerHTML = stateInfo.name;
-        let notes = document.createElement("p");
-        notes.innerHTML = `${stateInfo.notes} <br>
+        //if the findIndex function finds the state...
+        let stateLetters = stateInfo.state; //set up the state letters variable we'll be passing to add the cards for the state
+        header.innerHTML = stateInfo.name; //make the header the name of the state
+        let notes = document.createElement("p"); //create a paragraph to add to the div
+        //add the notes from the dataset's state metadata information and a link to their official state cvd-19 site
+        notes.innerHTML = `${stateInfo.notes} <br> 
         State Covid-19 Information site: ${stateInfo.covid19Site} `;
-        stateHeader.appendChild(header);
+        stateHeader.appendChild(header); // add them all to the index.html site
         stateHeader.appendChild(notes);
         infoContainer.appendChild(stateHeader);
-        searchState(stateLetters, timeFrame);
+        timeValidate(stateLetters, timeFrame); //proceed to time validation depending on the state and the timeframe
       }
-
-      // some other stuff here
     });
 };
 
-let searchState = (letters, time) => {
+let timeValidate = (letters, time) => {
   axios
-    .get(`https://api.covidtracking.com/v1/states/${letters}/daily.json`)
+    .get(`https://api.covidtracking.com/v1/states/${letters}/daily.json`) //get call for the state passed in the parameters
     .then((response) => {
-      console.log(response);
-      //standard axios promise
-
-      if (time == 0) {
-        addCard([response.data[0]]);
-      } // pass an ARRAY of just 1 element to create the initial info card
-
       //pass different numbers depending on the timeframe
-      else if (time == 1) {
+      if (time == 0) {
+        //if the time == 0 [daily], pass just the first element
+        addCard([response.data[0]]);
+      } else if (time == 1) {
+        //if the time == 1 [weekly], pass the first 7 elements
         addCard(response.data.slice(0, 7));
       } else if (time == 2) {
-        //takes ever 4th day for the monthly display
+        //if the time == 2 [monthly], pass every 4th day for 8 elements
         let monthlyCardDays = [];
         for (let i = 0; i < 33; i += 4) {
           monthlyCardDays.push(response.data[i]);
         }
         addCard(monthlyCardDays);
       }
-
-      //for current stat of day
     });
 };
 
 let addCard = (data) => {
-  //chart stuff~~~~~~~~
+  //chart stuff~~~~~~~~ initializing arrays to populate from loops below
   let dateArr = [];
   let hosCurrArr = [];
   let hosTotalArr = [];
@@ -201,7 +203,7 @@ let addCard = (data) => {
 
   //~~~~~~~~~~~~~~~~
   for (let i = 0; i < data.length; i++) {
-    // cardID++;
+    // depending on the size of the array that got passed... gets the information for EACH day
     let date = data[i].date.toString();
     date = new Date(
       `${date.slice(4, 6)}/${date.slice(6, 8)}/${date.slice(0, 4)}`
@@ -219,6 +221,8 @@ let addCard = (data) => {
     let { death } = data[i];
 
     //~~~~~~~~~~ add data for each iteration to the dataset to build the chart
+    // used unshift so that the displayed information will be chronologically increasing from left to right (used flex row reverse)
+    //this is because the data we get is in an array with the current day being index 0, and each previous day is a higher index
     dateArr.unshift(date.toDateString());
 
     hosCurrArr.unshift(hospitalizedCurrently);
@@ -238,7 +242,7 @@ let addCard = (data) => {
     deathsIncArr.unshift(deathIncrease);
     deathsTotalArr.unshift(death);
 
-    //~~~~~~~
+    //~~~~~~~ standard card creation stuff, create elements and append
 
     let card = document.createElement("div");
     card.setAttribute("class", "card");
@@ -272,23 +276,18 @@ let addCard = (data) => {
     cardBody.appendChild(cardPara);
     card.appendChild(cardBody);
 
-    let editBtn = document.createElement("button");
-    editBtn.setAttribute("class", "btn btn-primary");
-    editBtn.setAttribute("type", "button");
-    editBtn.innerHTML = "Edit";
-    editBtn.addEventListener("click", editCard);
-
     let delBtn = document.createElement("button");
     delBtn.setAttribute("class", "btn btn-danger");
     delBtn.setAttribute("type", "button");
     delBtn.innerHTML = "Delete";
     delBtn.addEventListener("click", deleteCard);
 
-    card.appendChild(editBtn);
     card.appendChild(delBtn);
 
     cardContainer.appendChild(card);
   }
+
+  //~~~~~~~~~~~ chris chart stuff
   Chart.defaults.global.defaultFontSize = 18;
 
   let canvas1 = document.createElement("canvas");
@@ -301,7 +300,6 @@ let addCard = (data) => {
   canvas2.setAttribute("width", "800");
   canvas2.setAttribute("height", "400");
 
-  //~~~~~~~~~~~ chris chart stuff
   var ctx1 = canvas1;
   var ventHospitalDeaths = new Chart(ctx1, {
     type: "bar",
@@ -415,84 +413,11 @@ let addCard = (data) => {
       },
     },
   });
-
-  // var ctx3 = document.getElementById("pieChart").getContext("2d");
-  // var pieChart = new Chart(ctx3, {
-  //   type: "doughnut",
-  //   data: {
-  //     labels: ["On Ventilator Cumulative", "On Ventilator Currently"],
-  //     datasets: [
-  //       {
-  //         labels: ["On Ventilator Cumulative", "On Ventilator Currently"],
-  //         data: [2055, 1870],
-  //         backgroundColor: [
-  //           "rgba(255,99, 132, 0.6)",
-  //           "rgba(54, 162, 235, 0.6)",
-  //         ],
-  //         borderWidth: 1,
-  //       },
-  //     ],
-  //   },
-  //   options: {
-  //     title: {
-  //       display: true,
-  //       text: "Covid Cases on Ventilators",
-  //       cutoutPercentage: 30,
-  //     },
-  //     legend: {
-  //       display: true,
-  //       position: "right",
-  //     },
-  //     layout: {
-  //       tooltips: {
-  //         enabled: true,
-  //       },
-  //     },
-  //   },
-  // });
-  // var ctx4 = document.getElementById("pieChart2").getContext("2d");
-  // var pieChart2 = new Chart(ctx4, {
-  //   type: "pie",
-  //   data: {
-  //     labels: ["Hospitalized Cumulative", "Hospitalized Currently"],
-  //     datasets: [
-  //       {
-  //         labels: ["Hospitalized Cumulative", "Hospitalized Currently"],
-  //         data: [369564, 35726],
-  //         backgroundColor: [
-  //           "rgba(133,222, 125, 0.6)",
-  //           "rgba(88, 192, 423, 0.6)",
-  //         ],
-  //         borderWidth: 1,
-  //       },
-  //     ],
-  //   },
-  //   options: {
-  //     title: {
-  //       display: true,
-  //       text: "Covid Cases that are Hospitalized",
-  //     },
-  //     legend: {
-  //       display: true,
-  //       position: "right",
-  //     },
-  //     layout: {
-  //       tooltips: {
-  //         enabled: true,
-  //       },
-  //     },
-  //   },
-  // });
-
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ end charts
   chartContainer.appendChild(canvas1);
   chartContainer.appendChild(canvas2);
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ end charts
 
-  document.getElementById("search-bar-container").reset();
-};
-
-let editCard = (e) => {
-  //maybe do something like ask for date later
+  document.getElementById("search-bar-container").reset(); //resets the search form
 };
 
 let deleteCard = (e) => {
