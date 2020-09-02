@@ -185,10 +185,19 @@ let searchState = (letters, time) => {
 let addCard = (data) => {
   //chart stuff~~~~~~~~
   let dateArr = [];
-  let postArr = [];
-  let negArr = [];
-  let totalArr = [];
-  let deathsData = [];
+  let hosCurrArr = [];
+  let hosTotalArr = [];
+  let ventCurrArr = [];
+  let ventTotalArr = [];
+  let testPosTotalArr = [];
+  let testNegTotalArr = [];
+  let testedTotalArr = [];
+
+  let postIncArr = [];
+  let negIncArr = [];
+  let totalTestIncArr = [];
+  let deathsIncArr = [];
+  let deathsTotalArr = [];
 
   //~~~~~~~~~~~~~~~~
   for (let i = 0; i < data.length; i++) {
@@ -207,14 +216,27 @@ let addCard = (data) => {
     let { positiveIncrease } = data[i];
     let { negativeIncrease } = data[i];
     let { deathIncrease } = data[i];
-    let { deathConfirmed } = data[i];
+    let { death } = data[i];
 
-    //~~~~~~~~~~ add data for each iteration to the dataset
+    //~~~~~~~~~~ add data for each iteration to the dataset to build the chart
     dateArr.unshift(date.toDateString());
-    postArr.unshift(positiveIncrease);
-    negArr.unshift(negativeIncrease);
-    totalArr.unshift(positiveIncrease + negativeIncrease);
-    deathsData.unshift(deathIncrease);
+
+    hosCurrArr.unshift(hospitalizedCurrently);
+    hosTotalArr.unshift(hospitalizedCumulative);
+
+    ventCurrArr.unshift(onVentilatorCurrently);
+    ventTotalArr.unshift(onVentilatorCumulative);
+
+    testPosTotalArr.unshift(positive);
+    testNegTotalArr.unshift(negative);
+    testedTotalArr.unshift(totalTestResults);
+
+    postIncArr.unshift(positiveIncrease);
+    negIncArr.unshift(negativeIncrease);
+    totalTestIncArr.unshift(positiveIncrease + negativeIncrease);
+
+    deathsIncArr.unshift(deathIncrease);
+    deathsTotalArr.unshift(death);
 
     //~~~~~~~
 
@@ -222,30 +244,14 @@ let addCard = (data) => {
     card.setAttribute("class", "card");
     card.style.maxWidth = "20%";
 
-    // let img = document.createElement("img");
-    // img.setAttribute("alt", "Image of: " + title);
-    // if (poster != "") {
-    //   img.setAttribute("src", poster);
-    // } else {
-    //   img.setAttribute(
-    //     "src",
-    //     "https://betravingknows.com/wp-content/uploads/2017/06/video-movie-placeholder-image-grey.png"
-    //   );
-    // }
-
-    // img.setAttribute("class", "card-img-top");
-
-    // card.appendChild(img);
-
     let cardBody = document.createElement("div");
     cardBody.setAttribute("class", "card-body");
+
     let header = document.createElement("h4");
     header.setAttribute("class", "card-title");
     header.style.textAlign = "center";
     header.innerHTML = date.toDateString();
-    // let header2 = document.createElement("h5");
-    // header2.setAttribute("class", "card-subtitle mb-2 text-muted");
-    // header2.innerHTML = year;
+
     let cardPara = document.createElement("p");
     cardPara.setAttribute("class", "card-text");
     cardPara.innerHTML = `Hospitalized Currently: ${hospitalizedCurrently} <br>
@@ -258,12 +264,11 @@ let addCard = (data) => {
     Tested Positive since the Day Before: ${positiveIncrease} <br>
     Tested Negative since the Day Before: ${negativeIncrease} <br> <hr> 
     Deaths since the day before: ${deathIncrease} <br>
-    Deaths Total: ${deathConfirmed}
+    Deaths Total: ${death}
     `;
 
     cardBody.appendChild(header);
     cardBody.appendChild(document.createElement("hr"));
-    // cardBody.appendChild(header2);
     cardBody.appendChild(cardPara);
     card.appendChild(cardBody);
 
@@ -284,13 +289,91 @@ let addCard = (data) => {
 
     cardContainer.appendChild(card);
   }
+  Chart.defaults.global.defaultFontSize = 18;
 
-  let canvas = document.createElement("canvas");
-  canvas.setAttribute("id", "increaseChart");
-  canvas.setAttribute("width", "800");
-  canvas.setAttribute("height", "400");
+  let canvas1 = document.createElement("canvas");
+  canvas1.setAttribute("id", "ventHospitalDeaths");
+  canvas1.setAttribute("width", "800");
+  canvas1.setAttribute("height", "400");
 
-  var ctx2 = canvas.getContext("2d");
+  let canvas2 = document.createElement("canvas");
+  canvas2.setAttribute("id", "increaseChart");
+  canvas2.setAttribute("width", "800");
+  canvas2.setAttribute("height", "400");
+
+  //~~~~~~~~~~~ chris chart stuff
+  var ctx1 = canvas1;
+  var ventHospitalDeaths = new Chart(ctx1, {
+    type: "bar",
+    data: {
+      labels: dateArr,
+
+      datasets: [
+        {
+          label: "hospitalized currently",
+          data: hosCurrArr,
+          stack: "hos",
+          backgroundColor: "rgba(255, 242, 0, 0.5)",
+        },
+        {
+          label: "hospitalized total",
+          data: deathsTotalArr,
+          stack: "hos",
+          backgroundColor: "rgba(108, 122, 137, 1)",
+        },
+        {
+          label: "on ventilator currently",
+          data: ventCurrArr,
+          stack: "vent",
+          backgroundColor: "rgba(105, 242, 0, 0.5)",
+        },
+        {
+          label: "on ventilator total",
+          data: ventTotalArr,
+          stack: "vent",
+          backgroundColor: "rgba(8, 162, 137, 1)",
+        },
+        {
+          label: "deaths since day before",
+          data: deathsIncArr,
+          stack: "death",
+          backgroundColor: "rgba(205, 102, 0, 0.5)",
+        },
+        {
+          label: "deaths total",
+          data: deathsTotalArr,
+          stack: "death",
+          backgroundColor: "rgba(208, 122, 137, 1)",
+        },
+      ],
+      borderWidth: 1,
+    },
+
+    options: {
+      title: {
+        display: true,
+        fontStyle: "bold",
+        fontFamily: "Helvetica Neue",
+        text: "Covid 19 Deaths",
+      },
+      scales: {
+        xAxes: [
+          {
+            stacked: true,
+          },
+        ],
+        yAxes: [
+          {
+            stacked: true,
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
+      },
+    },
+  });
+  var ctx2 = canvas2.getContext("2d");
   var increaseChart = new Chart(ctx2, {
     type: "bar",
     data: {
@@ -299,22 +382,17 @@ let addCard = (data) => {
         {
           label: "Positive Test Increase",
           backgroundColor: "rgba(255,100,30,1)",
-          data: postArr,
+          data: postIncArr,
         },
         {
           label: "Negative Test Increase",
           backgroundColor: "rgba(255,0,0,1)",
-          data: negArr,
+          data: negIncArr,
         },
         {
           label: "Total Test Increase",
           backgroundColor: "rgba(0,255,255,1)",
-          data: totalArr,
-        },
-        {
-          label: "Deaths Increase",
-          backgroundColor: "rgba(255,255,255,1)",
-          data: deathsData,
+          data: totalTestIncArr,
         },
       ],
     },
@@ -338,9 +416,79 @@ let addCard = (data) => {
     },
   });
 
-  chartContainer.appendChild(canvas);
+  // var ctx3 = document.getElementById("pieChart").getContext("2d");
+  // var pieChart = new Chart(ctx3, {
+  //   type: "doughnut",
+  //   data: {
+  //     labels: ["On Ventilator Cumulative", "On Ventilator Currently"],
+  //     datasets: [
+  //       {
+  //         labels: ["On Ventilator Cumulative", "On Ventilator Currently"],
+  //         data: [2055, 1870],
+  //         backgroundColor: [
+  //           "rgba(255,99, 132, 0.6)",
+  //           "rgba(54, 162, 235, 0.6)",
+  //         ],
+  //         borderWidth: 1,
+  //       },
+  //     ],
+  //   },
+  //   options: {
+  //     title: {
+  //       display: true,
+  //       text: "Covid Cases on Ventilators",
+  //       cutoutPercentage: 30,
+  //     },
+  //     legend: {
+  //       display: true,
+  //       position: "right",
+  //     },
+  //     layout: {
+  //       tooltips: {
+  //         enabled: true,
+  //       },
+  //     },
+  //   },
+  // });
+  // var ctx4 = document.getElementById("pieChart2").getContext("2d");
+  // var pieChart2 = new Chart(ctx4, {
+  //   type: "pie",
+  //   data: {
+  //     labels: ["Hospitalized Cumulative", "Hospitalized Currently"],
+  //     datasets: [
+  //       {
+  //         labels: ["Hospitalized Cumulative", "Hospitalized Currently"],
+  //         data: [369564, 35726],
+  //         backgroundColor: [
+  //           "rgba(133,222, 125, 0.6)",
+  //           "rgba(88, 192, 423, 0.6)",
+  //         ],
+  //         borderWidth: 1,
+  //       },
+  //     ],
+  //   },
+  //   options: {
+  //     title: {
+  //       display: true,
+  //       text: "Covid Cases that are Hospitalized",
+  //     },
+  //     legend: {
+  //       display: true,
+  //       position: "right",
+  //     },
+  //     layout: {
+  //       tooltips: {
+  //         enabled: true,
+  //       },
+  //     },
+  //   },
+  // });
 
-  document.getElementById("searchForm").reset();
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ end charts
+  chartContainer.appendChild(canvas1);
+  chartContainer.appendChild(canvas2);
+
+  document.getElementById("search-bar-container").reset();
 };
 
 let editCard = (e) => {
