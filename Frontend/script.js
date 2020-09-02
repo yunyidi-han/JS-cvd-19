@@ -5,6 +5,43 @@ const lightBreathImage = document.getElementById("light-breath-image");
 const lightFeverImage = document.getElementById("light-fever-image");
 const wearMaskImage = document.getElementById("wear-mask-image");
 
+const statePaths = document.getElementsByTagName("path");
+const posIncreaseArr = [];
+
+//populates pos increaseArr with objects {state(2 letters): Positive Test Increases from previous day}
+axios
+  .get(`https://api.covidtracking.com/v1/states/current.json`)
+  .then((response) => {
+    for (i = 0; i < statePaths.length; i++) {
+      let pathID = statePaths[i].getAttribute("id");
+      for (j = 0; j < response.data.length; j++) {
+        if (response.data[j].state == pathID) {
+          posIncreaseArr.push(response.data[j].positiveIncrease);
+          break;
+        }
+      }
+    }
+    for (i = 0; i < statePaths.length; i++) {
+      let color = "black";
+      if (posIncreaseArr[i] < 500) {
+        color = "green";
+      }
+      if (posIncreaseArr[i] >= 500 && posIncreaseArr[i] < 1000) {
+        color = "yellow";
+      }
+      if (posIncreaseArr[i] >= 1000 && posIncreaseArr[i] < 3000) {
+        color = "brown";
+      }
+      if (posIncreaseArr[i] >= 3000) {
+        color = "red";
+      }
+      statePaths[i].setAttribute("fill", color);
+    }
+  });
+
+document.getElementById("HI").setAttribute("fill", "red");
+//sets the color for the heatmap
+
 symptomsTab.addEventListener("click", () => {
   coughimage.style.display = "block";
   lightBreathImage.style.display = "block";
