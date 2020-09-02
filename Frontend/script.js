@@ -293,12 +293,12 @@ let addCard = (data) => {
   let canvas1 = document.createElement("canvas");
   canvas1.setAttribute("id", "ventHospitalDeaths");
   canvas1.setAttribute("width", "800");
-  canvas1.setAttribute("height", "400");
+  canvas1.setAttribute("height", "800");
 
   let canvas2 = document.createElement("canvas");
   canvas2.setAttribute("id", "increaseChart");
   canvas2.setAttribute("width", "800");
-  canvas2.setAttribute("height", "400");
+  canvas2.setAttribute("height", "800");
 
   var ctx1 = canvas1;
   var ventHospitalDeaths = new Chart(ctx1, {
@@ -315,7 +315,7 @@ let addCard = (data) => {
         },
         {
           label: "hospitalized total",
-          data: deathsTotalArr,
+          data: hosTotalArr,
           stack: "hos",
           backgroundColor: "rgba(108, 122, 137, 1)",
         },
@@ -325,12 +325,12 @@ let addCard = (data) => {
           stack: "vent",
           backgroundColor: "rgba(105, 242, 0, 0.5)",
         },
-        {
-          label: "on ventilator total",
-          data: ventTotalArr,
-          stack: "vent",
-          backgroundColor: "rgba(8, 162, 137, 1)",
-        },
+        // {
+        //   label: "on ventilator total",
+        //   data: ventTotalArr,
+        //   stack: "vent",
+        //   backgroundColor: "rgba(8, 162, 137, 1)",
+        // },
         {
           label: "deaths since day before",
           data: deathsIncArr,
@@ -352,7 +352,7 @@ let addCard = (data) => {
         display: true,
         fontStyle: "bold",
         fontFamily: "Helvetica Neue",
-        text: "Covid 19 Deaths",
+        text: "Hospital Statistics",
       },
       scales: {
         xAxes: [
@@ -362,10 +362,22 @@ let addCard = (data) => {
         ],
         yAxes: [
           {
-            stacked: true,
+            type: 'logarithmic',
+            stacked: false,
             ticks: {
               beginAtZero: true,
+              autoSkip: true,
+              callback: function (value, index, values) {
+                if (value == 10 || value == 100 || value == 1000 || value == 10000 || value == 100000 || value == 1000000) {
+                  return value;
+                }
+              }
             },
+            scaleLabel: {
+              display: true,
+
+            }
+
           },
         ],
       },
@@ -392,6 +404,16 @@ let addCard = (data) => {
           backgroundColor: "rgba(0,255,255,1)",
           data: totalTestIncArr,
         },
+        {
+          label: "Total Positive Tests",
+          backgroundColor: "rgba(0, 323, 123, 2)",
+          data: testPosTotalArr
+        },
+        {
+          label: "Total Negative Tests",
+          backgroundColor: "rgba( 238, 123, 382, 3)",
+          data: testNegTotalArr
+        }
       ],
     },
     options: {
@@ -399,14 +421,21 @@ let addCard = (data) => {
         display: true,
         fontStyle: "bold",
         fontFamily: "Helvetica Neue",
-        text: "Daily Changes in Statistics",
+        text: "Covid19 Testing Statistics",
       },
       barValueSpacing: 20,
       scales: {
         yAxes: [
           {
+            type: 'logarithmic',
             ticks: {
               beginAtZero: true,
+              autoSkip: true,
+              callback: function (value, index, values) {
+                if (value == 10 || value == 100 || value == 1000 || value == 10000 || value == 100000 || value == 1000000) {
+                  return value;
+                }
+              },
             },
           },
         ],
