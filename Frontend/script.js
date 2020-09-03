@@ -1,12 +1,7 @@
-const symptomsTab = document.getElementById("symptoms");
-const stopSpread = document.getElementById("stop-spread");
-const coughimage = document.getElementById("cough-image");
-const lightBreathImage = document.getElementById("light-breath-image");
-const lightFeverImage = document.getElementById("light-fever-image");
-const wearMaskImage = document.getElementById("wear-mask-image");
-
 const statePaths = document.getElementsByTagName("path"); // gets ALL the path tags, which are the states in the interative map
 const posIncreaseArr = []; // gets populated with the increase in positive test cases from the day before
+var dateTime = new Date();
+document.getElementById("date-time").innerHTML = dateTime.toLocaleString();
 
 //populates posIncreaseArr with -Positive Test Increases from previous day-... added in the order that the path array was added
 axios
@@ -25,38 +20,24 @@ axios
       }
     }
     for (i = 0; i < statePaths.length; i++) {
-      // after the posIncreaseArr gets populated... we iterate over the path again to change the fill color for each state
-      //a bit redundant, we could have put it in the loop above, but this way we can scale values later if we choose to [for example 0-100% opacity of 1 color]
-      let color = "black";
+    // after the posIncreaseArr gets populated... we iterate over the path again to change the fill color for each state
+    //a bit redundant, we could have put it in the loop above, but this way we can scale values later if we choose to [for example 0-100% opacity of 1 color]
+      let color = "#1d4877";
       if (posIncreaseArr[i] < 500) {
-        color = "green";
+        color = "#1b8a5a";
       }
       if (posIncreaseArr[i] >= 500 && posIncreaseArr[i] < 1000) {
-        color = "yellow";
+        color = "#fbb021";
       }
       if (posIncreaseArr[i] >= 1000 && posIncreaseArr[i] < 3000) {
-        color = "brown";
+        color = "#f68838";
       }
       if (posIncreaseArr[i] >= 3000) {
-        color = "red";
+        color = "#ee3e32";
       }
       statePaths[i].setAttribute("fill", color);
     }
   });
-
-symptomsTab.addEventListener("click", () => {
-  coughimage.style.display = "block";
-  lightBreathImage.style.display = "block";
-  lightFeverImage.style.display = "block";
-  wearMaskImage.style.display = "none";
-});
-
-stopSpread.addEventListener("click", () => {
-  wearMaskImage.style.display = "block";
-  coughimage.style.display = "none";
-  lightBreathImage.style.display = "none";
-  lightFeverImage.style.display = "none";
-});
 
 /*This portion of code is for the US map */
 $("path, circle").hover(function (e) {
@@ -246,7 +227,7 @@ let addCard = (data) => {
 
     let card = document.createElement("div");
     card.setAttribute("class", "card");
-    card.style.maxWidth = "20%";
+    card.style.width = "20%";
 
     let cardBody = document.createElement("div");
     cardBody.setAttribute("class", "card-body");

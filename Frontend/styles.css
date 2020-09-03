@@ -1,27 +1,98 @@
-body {
+.parallax {
   display: flex;
   flex-direction: column;
-  position: relative;
-  min-height: 100vh;
-  background-color: darkgray;
-  scroll-behavior: smooth;
+  background-image: url("./images/26577.jpg");
+  height: 100%;
+  width: 100%;
+  background-attachment: fixed;
+  background-position: center;
+
+  background-size: cover;
+  background-repeat: no-repeat;
 }
+#navbar-container {
+  display: flex;
+  flex-direction: column;
+}
+
 #search-body {
-  padding-top: 50px;
-  padding-bottom: 30px;
+  padding-top: 1%;
 }
+
 .search-bar-container {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+}
+.carousel {
+  max-width: 80%;
+  max-width: height 10%;
+  margin-left: 10%;
+  padding-top: 1%;
+}
+
+.carousel-item img {
+  width: auto;
+  max-height: 250px;
+  background-size: cover;
+  display: block;
+  margin: auto;
+}
+
+.card-body {
+  background-image: url("./images/card-background.jpg");
+  background-size: cover;
+  color: white;
+}
+.card-title {
+  border: #bf0a30 2px solid;
+  padding: 5%;
+}
+#display-head {
+  color: white;
+  font-size: bold;
+  margin-left: 1%;
+  border: #bf0a30 2px solid;
+}
+.legend {
+  border: #bf0a30 2x solid;
+  margin-left: 1%;
+}
+.legend .legend-title {
+  text-align: left;
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 90%;
+  color: white;
+}
+.legend .legend-scale ul {
+  margin: 0;
+  padding: 0;
+  float: none;
+  list-style: none;
+}
+.legend .legend-scale ul li {
+  display: block;
+  float: left;
+  width: 50px;
+  margin-bottom: 6px;
+  text-align: center;
+  font-size: 80%;
+  list-style: none;
+  color: white;
+}
+.legend .legend-scale ul li span {
+  display: block;
+  float: left;
+  height: 15px;
+  width: 50px;
 }
 #display-charts {
-  width: 100%;
-  height: 500px;
+  width: 99%;
+  height: 100%;
+  margin-left: 1%;
 }
 
 #footer {
-  position: relative;
   bottom: 0;
   width: 100%;
   height: 2.5rem;
@@ -72,7 +143,7 @@ form.example::after {
 */
 #us-map {
   display: block;
-
+  padding: 1%;
   width: 50%;
   height: 50%;
   margin-left: 25%;
@@ -106,7 +177,11 @@ circle:hover {
 @media screen and (max-width: 800px) {
   #container-header,
   #search-body,
+  #display-cards,
   #display-charts,
+  #display-head,
+  .legend,
+  .card,
   #footer {
     width: 100%; /* The width is 100%, when the viewport is 800px or smaller */
   }
