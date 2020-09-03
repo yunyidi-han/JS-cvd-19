@@ -91,6 +91,7 @@ let searchButton = document.getElementById("search"); //button for the action li
 let infoContainer = document.getElementById("display-head"); // element where all the search stuff will return to
 let cardContainer = document.getElementById("display-cards");
 let chartContainer = document.getElementById("display-graphs");
+let chartContainer2 = document.getElementById("display-graphs2");
 
 let stateBox = document.getElementById("state"); //element with the state's entry
 let timeBoxs = document.getElementsByName("radio-button-time"); // element with the time frame's entry
@@ -295,6 +296,7 @@ let addCard = (data) => {
   canvas1.setAttribute("id", "ventHospitalDeaths");
   canvas1.setAttribute("width", "800");
   canvas1.setAttribute("height", "800");
+  canvas1.setAttribute("background-color", "white");
 
   let canvas2 = document.createElement("canvas");
   canvas2.setAttribute("id", "increaseChart");
@@ -515,7 +517,7 @@ let addCard = (data) => {
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ end charts
   chartContainer.appendChild(canvas1);
-  chartContainer.appendChild(canvas2);
+  chartContainer2.appendChild(canvas2);
 
   document.getElementById("search-bar-container").reset();
 };
