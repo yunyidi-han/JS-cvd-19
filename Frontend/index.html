@@ -19,6 +19,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
 
     <title>Covid-19 updates</title>
@@ -37,13 +41,21 @@
     >
       <!-- As a heading -->
       <nav
+        id="navbar-container"
         class="navbar"
-        style="justify-content: center; font-weight: bolder; color: white"
+        style="
+          font-weight: bolder;
+          color: white;
+          font-family: Abril Fatface, cursive;
+          font-size: 90%;
+        "
       >
         <h1>Welcome to oh CRUD site!</h1>
-        <br />
 
-        <h4>The one stop source of COVID information</h4>
+        <h4 style="align-items: center">
+          The one stop source of COVID information
+        </h4>
+        <h3 id="date-time" style="color: red"></h3>
       </nav>
     </div>
 
@@ -534,6 +546,20 @@
           d="M385,593v55l36,45 M174,525h144l67,68h86l53,54v46"
         />
       </svg>
+    </div>
+    <!--color legends-->
+    <div class="legend">
+      <div class="legend-title" style="font-family: Abril Fatface, cursive">
+        Positive Increase
+      </div>
+      <div class="legend-scale">
+        <ul class="legend-labels">
+          <li><span style="background: #1b8a5a"></span>0-500 cases</li>
+          <li><span style="background: #fbb021"></span>500-1000 cases</li>
+          <li><span style="background: #f68838"></span>1000-2000 cases</li>
+          <li><span style="background: #ee3e32"></span>3000+ cases</li>
+        </ul>
+      </div>
     </div>
 
     <!--display state header-->

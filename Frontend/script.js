@@ -1,5 +1,7 @@
 const statePaths = document.getElementsByTagName("path");
 const posIncreaseArr = [];
+var dateTime = new Date();
+document.getElementById("date-time").innerHTML = dateTime.toLocaleString();
 
 //populates pos increaseArr with objects {state(2 letters): Positive Test Increases from previous day}
 axios

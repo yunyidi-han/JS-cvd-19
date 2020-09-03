@@ -10,6 +10,10 @@
   background-size: cover;
   background-repeat: no-repeat;
 }
+#navbar-container {
+  display: flex;
+  flex-direction: column;
+}
 
 #search-body {
   padding-top: 50px;
@@ -50,6 +54,38 @@
   font-size: bold;
   margin-left: 1%;
   border: #bf0a30 2px solid;
+}
+.legend {
+  margin-left: 30%;
+}
+.legend .legend-title {
+  text-align: left;
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 90%;
+  color: white;
+}
+.legend .legend-scale ul {
+  margin: 0;
+  padding: 0;
+  float: none;
+  list-style: none;
+}
+.legend .legend-scale ul li {
+  display: block;
+  float: left;
+  width: 50px;
+  margin-bottom: 6px;
+  text-align: center;
+  font-size: 80%;
+  list-style: none;
+  color: white;
+}
+.legend .legend-scale ul li span {
+  display: block;
+  float: left;
+  height: 15px;
+  width: 50px;
 }
 #display-charts {
   width: 99%;
@@ -145,6 +181,7 @@ circle:hover {
   #display-cards,
   #display-charts,
   #display-head,
+  .legend,
   .card,
   #footer {
     width: 100%; /* The width is 100%, when the viewport is 800px or smaller */
