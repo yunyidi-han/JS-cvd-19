@@ -185,7 +185,7 @@ let addCard = (data) => {
   let deathsTotalArr = [];
 
   //~~~~~~~~~~~~~~~~
-  for (let i = 0; i < data.length; i++) {
+  for (let i = data.length - 1; i >= 0; i--) {
     // depending on the size of the array that got passed... gets the information for EACH day
     let date = data[i].date.toString();
     date = new Date(
@@ -206,24 +206,24 @@ let addCard = (data) => {
     //~~~~~~~~~~ add data for each iteration to the dataset to build the chart
     // used unshift so that the displayed information will be chronologically increasing from left to right (used flex row reverse)
     //this is because the data we get is in an array with the current day being index 0, and each previous day is a higher index
-    dateArr.unshift(date.toDateString());
+    dateArr.push(date.toDateString());
 
-    hosCurrArr.unshift(hospitalizedCurrently);
-    hosTotalArr.unshift(hospitalizedCumulative);
+    hosCurrArr.push(hospitalizedCurrently);
+    hosTotalArr.push(hospitalizedCumulative);
 
-    ventCurrArr.unshift(onVentilatorCurrently);
-    ventTotalArr.unshift(onVentilatorCumulative);
+    ventCurrArr.push(onVentilatorCurrently);
+    ventTotalArr.push(onVentilatorCumulative);
 
-    testPosTotalArr.unshift(positive);
-    testNegTotalArr.unshift(negative);
-    testedTotalArr.unshift(totalTestResults);
+    testPosTotalArr.push(positive);
+    testNegTotalArr.push(negative);
+    testedTotalArr.push(totalTestResults);
 
-    postIncArr.unshift(positiveIncrease);
-    negIncArr.unshift(negativeIncrease);
-    totalTestIncArr.unshift(positiveIncrease + negativeIncrease);
+    postIncArr.push(positiveIncrease);
+    negIncArr.push(negativeIncrease);
+    totalTestIncArr.push(positiveIncrease + negativeIncrease);
 
-    deathsIncArr.unshift(deathIncrease);
-    deathsTotalArr.unshift(death);
+    deathsIncArr.push(deathIncrease);
+    deathsTotalArr.push(death);
 
     //~~~~~~~ standard card creation stuff, create elements and append
 
