@@ -19,6 +19,12 @@
   padding-top: 1%;
 }
 
+#display-graphs,
+#display-graphs2 {
+  padding: 2px 2px 2px 2px;
+  border: thick double black;
+}
+
 .search-bar-container {
   display: flex;
   flex-direction: row;

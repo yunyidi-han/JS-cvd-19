@@ -20,8 +20,8 @@ axios
       }
     }
     for (i = 0; i < statePaths.length; i++) {
-    // after the posIncreaseArr gets populated... we iterate over the path again to change the fill color for each state
-    //a bit redundant, we could have put it in the loop above, but this way we can scale values later if we choose to [for example 0-100% opacity of 1 color]
+      // after the posIncreaseArr gets populated... we iterate over the path again to change the fill color for each state
+      //a bit redundant, we could have put it in the loop above, but this way we can scale values later if we choose to [for example 0-100% opacity of 1 color]
       let color = "#1d4877";
       if (posIncreaseArr[i] < 500) {
         color = "#1b8a5a";
@@ -73,6 +73,7 @@ let searchButton = document.getElementById("search"); //button for the action li
 let infoContainer = document.getElementById("display-head"); // element where all the search stuff will return to
 let cardContainer = document.getElementById("display-cards");
 let chartContainer = document.getElementById("display-graphs");
+let chartContainer2 = document.getElementById("display-graphs2");
 
 let stateBox = document.getElementById("state"); //element with the state's entry
 let timeBoxs = document.getElementsByName("radio-button-time"); // element with the time frame's entry
@@ -101,6 +102,7 @@ let searchValidate = (state) => {
   infoContainer.innerHTML = ""; //clear the containers for a fresh search
   cardContainer.innerHTML = "";
   chartContainer.innerHTML = "";
+  chartContainer2.innerHTML = "";
   axios
     .get("https://api.covidtracking.com/v1/states/info.json") //first axios get for the states metainfo pages
     .then((response) => {
@@ -133,7 +135,7 @@ let searchValidate = (state) => {
         header.innerHTML = stateInfo.name; //make the header the name of the state
         let notes = document.createElement("p"); //create a paragraph to add to the div
         //add the notes from the dataset's state metadata information and a link to their official state cvd-19 site
-        notes.innerHTML = `${stateInfo.notes} <br> 
+        notes.innerHTML = `${stateInfo.notes} <br> <hr> 
         State Covid-19 Information site: ${stateInfo.covid19Site} `;
         stateHeader.appendChild(header); // add them all to the index.html site
         stateHeader.appendChild(notes);
@@ -343,22 +345,27 @@ let addCard = (data) => {
         ],
         yAxes: [
           {
-            type: 'logarithmic',
+            type: "logarithmic",
             stacked: false,
             ticks: {
               beginAtZero: true,
               autoSkip: true,
               callback: function (value, index, values) {
-                if (value == 10 || value == 100 || value == 1000 || value == 10000 || value == 100000 || value == 1000000) {
+                if (
+                  value == 10 ||
+                  value == 100 ||
+                  value == 1000 ||
+                  value == 10000 ||
+                  value == 100000 ||
+                  value == 1000000
+                ) {
                   return value;
                 }
-              }
+              },
             },
             scaleLabel: {
               display: true,
-
-            }
-
+            },
           },
         ],
       },
@@ -388,13 +395,13 @@ let addCard = (data) => {
         {
           label: "Total Positive Tests",
           backgroundColor: "rgba(0, 323, 123, 2)",
-          data: testPosTotalArr
+          data: testPosTotalArr,
         },
         {
           label: "Total Negative Tests",
           backgroundColor: "rgba( 238, 123, 382, 3)",
-          data: testNegTotalArr
-        }
+          data: testNegTotalArr,
+        },
       ],
     },
     options: {
@@ -408,12 +415,19 @@ let addCard = (data) => {
       scales: {
         yAxes: [
           {
-            type: 'logarithmic',
+            type: "logarithmic",
             ticks: {
               beginAtZero: true,
               autoSkip: true,
               callback: function (value, index, values) {
-                if (value == 10 || value == 100 || value == 1000 || value == 10000 || value == 100000 || value == 1000000) {
+                if (
+                  value == 10 ||
+                  value == 100 ||
+                  value == 1000 ||
+                  value == 10000 ||
+                  value == 100000 ||
+                  value == 1000000
+                ) {
                   return value;
                 }
               },
@@ -424,7 +438,7 @@ let addCard = (data) => {
     },
   });
   chartContainer.appendChild(canvas1);
-  chartContainer.appendChild(canvas2);
+  chartContainer2.appendChild(canvas2);
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ end charts
 
   document.getElementById("search-bar-container").reset(); //resets the search form
