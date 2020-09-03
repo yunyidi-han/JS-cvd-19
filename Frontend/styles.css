@@ -16,14 +16,12 @@
 }
 
 #search-body {
-  padding-top: 50px;
-  padding-bottom: 30px;
+  padding-top: 1%;
 }
 
 .search-bar-container {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
 }
 .carousel {
   max-width: 80%;
@@ -56,7 +54,8 @@
   border: #bf0a30 2px solid;
 }
 .legend {
-  margin-left: 30%;
+  border: #bf0a30 2x solid;
+  margin-left: 1%;
 }
 .legend .legend-title {
   text-align: left;
@@ -144,7 +143,7 @@ form.example::after {
 */
 #us-map {
   display: block;
-  padding: 5%;
+  padding: 1%;
   width: 50%;
   height: 50%;
   margin-left: 25%;
