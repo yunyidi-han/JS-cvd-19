@@ -1,10 +1,3 @@
-const symptomsTab = document.getElementById("symptoms");
-const stopSpread = document.getElementById("stop-spread");
-const coughimage = document.getElementById("cough-image");
-const lightBreathImage = document.getElementById("light-breath-image");
-const lightFeverImage = document.getElementById("light-fever-image");
-const wearMaskImage = document.getElementById("wear-mask-image");
-
 const statePaths = document.getElementsByTagName("path");
 const posIncreaseArr = [];
 
@@ -22,18 +15,18 @@ axios
       }
     }
     for (i = 0; i < statePaths.length; i++) {
-      let color = "black";
+      let color = "#1d4877";
       if (posIncreaseArr[i] < 500) {
-        color = "green";
+        color = "#1b8a5a";
       }
       if (posIncreaseArr[i] >= 500 && posIncreaseArr[i] < 1000) {
-        color = "yellow";
+        color = "#fbb021";
       }
       if (posIncreaseArr[i] >= 1000 && posIncreaseArr[i] < 3000) {
-        color = "brown";
+        color = "#f68838";
       }
       if (posIncreaseArr[i] >= 3000) {
-        color = "red";
+        color = "#ee3e32";
       }
       statePaths[i].setAttribute("fill", color);
     }
@@ -41,20 +34,6 @@ axios
 
 document.getElementById("HI").setAttribute("fill", "red");
 //sets the color for the heatmap
-
-symptomsTab.addEventListener("click", () => {
-  coughimage.style.display = "block";
-  lightBreathImage.style.display = "block";
-  lightFeverImage.style.display = "block";
-  wearMaskImage.style.display = "none";
-});
-
-stopSpread.addEventListener("click", () => {
-  wearMaskImage.style.display = "block";
-  coughimage.style.display = "none";
-  lightBreathImage.style.display = "none";
-  lightFeverImage.style.display = "none";
-});
 
 /*This portion of code is for the US map */
 $("path, circle").hover(function (e) {
@@ -220,7 +199,7 @@ let addCard = (data) => {
 
     let card = document.createElement("div");
     card.setAttribute("class", "card");
-    card.style.maxWidth = "20%";
+    card.style.width = "20%";
 
     // let img = document.createElement("img");
     // img.setAttribute("alt", "Image of: " + title);
